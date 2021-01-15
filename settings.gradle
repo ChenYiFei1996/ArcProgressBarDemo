@@ -1,0 +1,3 @@
+include ':arcprogressbar'
+include ':app'
+rootProject.name = "ArcProgressBarDemo"
