@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -15,8 +16,12 @@ import com.cyf.arcprogressbar.R;
 
 /**
  * Description: 圆形进度条
- * Author: 19029153 2020/12/8 9:22
+ * Author: cyf 2020/12/8 9:22
  * Version: 1.0
+ * UpdateUser: 19029153 2021/1/18 18:06
+ * UpdateRemark: 绘制圆弧从直接使用canvas的drawArc方法改为绘制arcpath，
+ * 因为实测发现drawArc方法存在角度偏差，绘制两段连接的圆弧时中间会出现空白（安卓10上未发现此问题）
+ * Version: 1.1
  */
 public class ArcProgressBar extends ProgressBar {
     public static final int STYLE_TICK = 1;                        //刻度
@@ -46,6 +51,9 @@ public class ArcProgressBar extends ProgressBar {
     private RectF mArcRect;                                        //绘制圆弧的矩形区域
     private Paint mLinePaint;                                      //刻度型进度条画笔
     private Paint mArcPaint;                                       //填充型进度条画笔
+    private Path unProgressPath = new Path();                      //无进度条部分圆弧的绘制路径
+    private Path progressPath = new Path();                        //有进度条部分圆弧的绘制路径
+    private Path bgPath = new Path();                              //刻度进度条背景绘制路径
 
     public ArcProgressBar(Context context) {
         this(context, null);
@@ -133,14 +141,25 @@ public class ArcProgressBar extends ProgressBar {
             float targetDegree = (360 - mDegree) * progressProportion;//有进度部分扫过的角度
             //绘制完成部分
             mArcPaint.setColor(mProgressColor);
+            //改为使用绘制路径的方式绘制圆弧，因为实际测试直接使用canvas绘制圆弧会出现角度偏差
+            progressPath.reset();
+            progressPath.addArc(mArcRect, 90 + angle, targetDegree);
+            canvas.drawPath(progressPath, mArcPaint);
             //drawArc的参数含义：绘制的矩形区域，开始绘制的角度，圆弧扫过的角度，是否经过圆心，画笔
-            canvas.drawArc(mArcRect, 90 + angle, targetDegree, false, mArcPaint);
+//            canvas.drawArc(mArcRect, 90 + angle, targetDegree, false, mArcPaint);
+
             //绘制未完成部分
             mArcPaint.setColor(mUnProgressColor);
-            canvas.drawArc(mArcRect, 90 + angle + targetDegree, 360 - mDegree - targetDegree, false, mArcPaint);
+            unProgressPath.reset();
+            unProgressPath.addArc(mArcRect, 90 + angle + targetDegree, 360 - mDegree - targetDegree);
+            canvas.drawPath(unProgressPath, mArcPaint);
+//            canvas.drawArc(mArcRect, 90 + angle + targetDegree, 360 - mDegree - targetDegree, false, mArcPaint);
         } else {
             if (mBgShow) {//绘制圆弧背景
-                canvas.drawArc(mArcRect, 90 + angle, 360 - mDegree, false, mArcPaint);
+                bgPath.reset();
+                bgPath.addArc(mArcRect, 90 + angle, 360 - mDegree);
+                canvas.drawPath(bgPath, mArcPaint);
+//                canvas.drawArc(mArcRect, 90 + angle, 360 - mDegree, false, mArcPaint);
             }
             canvas.rotate(180 + angle, x, y);//绕圆心旋转坐标轴
             for (int i = 0; i <= count; i++) {
