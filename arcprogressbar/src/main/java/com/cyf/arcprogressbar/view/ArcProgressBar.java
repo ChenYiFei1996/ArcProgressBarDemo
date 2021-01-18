@@ -18,7 +18,7 @@ import com.cyf.arcprogressbar.R;
  * Description: 圆形进度条
  * Author: cyf 2020/12/8 9:22
  * Version: 1.0
- * UpdateUser: 19029153 2021/1/18 18:06
+ * UpdateUser: cyf 2021/1/18 18:06
  * UpdateRemark: 绘制圆弧从直接使用canvas的drawArc方法改为绘制arcpath，
  * 因为实测发现drawArc方法存在角度偏差，绘制两段连接的圆弧时中间会出现空白（安卓10上未发现此问题）
  * Version: 1.1
