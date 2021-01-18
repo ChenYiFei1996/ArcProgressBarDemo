@@ -38,7 +38,7 @@ public class ArcProgressBar extends ProgressBar {
     private int mBoardWidth = DEFAULT_BORDER_WIDTH;                //进度条宽度
     private int mDegree = DEFAULT_OFFSET_DEGREE;                   //圆形中无进度条部分的角度
     private int mArcBgColor = DEFAULT_ARC_BG_COLOR;                //进度条背景颜色，刻度进度条生效
-    private int mUnmProgressColor = DEFAULT_UNPROGRESS_COLOR;      //进度条无进度部分颜色
+    private int mUnProgressColor = DEFAULT_UNPROGRESS_COLOR;      //进度条无进度部分颜色
     private int mProgressColor = DEFAULT_PROGRESS_COLOR;           //进度条进度颜色
     private int mTickWidth = DEFAULT_TICK_WIDTH;                   //刻度宽度
     private int mTickDensity = DEFAULT_TICK_DENSITY;               //默认每个刻度相较上一个的旋转角度
@@ -72,7 +72,7 @@ public class ArcProgressBar extends ProgressBar {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ArcProgressBar);
             try {
                 mBoardWidth = a.getDimensionPixelOffset(R.styleable.ArcProgressBar_borderWidth, DEFAULT_BORDER_WIDTH);
-                mUnmProgressColor = a.getColor(R.styleable.ArcProgressBar_unProgressColor, DEFAULT_UNPROGRESS_COLOR);
+                mUnProgressColor = a.getColor(R.styleable.ArcProgressBar_unProgressColor, DEFAULT_UNPROGRESS_COLOR);
                 mProgressColor = a.getColor(R.styleable.ArcProgressBar_progressColor, DEFAULT_PROGRESS_COLOR);
                 mArcBgColor = a.getColor(R.styleable.ArcProgressBar_arcBgColor, DEFAULT_ARC_BG_COLOR);
                 mTickWidth = a.getDimensionPixelOffset(R.styleable.ArcProgressBar_tickWidth, DEFAULT_TICK_WIDTH);
@@ -126,7 +126,7 @@ public class ArcProgressBar extends ProgressBar {
 //        float y = mArcRect.bottom / 2 + ((float) mBoardWidth) / 2;//圆心y
         float x = mArcRect.width() / 2 + mArcRect.left;//圆心x
         float y = mArcRect.height() / 2 + mArcRect.top;//圆心y
-        int angle = mDegree / 2;    //进度条开始绘制的角度，90+此值，即圆形无进度条部分总是朝下
+        float angle = ((float) mDegree) / 2;    //进度条开始绘制的角度，90+此值，即圆形无进度条部分总是朝下
         int count = (360 - mDegree) / mTickDensity; //进度条总刻度数量
         int target = (int) (progressProportion * count); //有进度部分的刻度数量
         if (mStyleProgress == STYLE_ARC) {
@@ -136,7 +136,7 @@ public class ArcProgressBar extends ProgressBar {
             //drawArc的参数含义：绘制的矩形区域，开始绘制的角度，圆弧扫过的角度，是否经过圆心，画笔
             canvas.drawArc(mArcRect, 90 + angle, targetDegree, false, mArcPaint);
             //绘制未完成部分
-            mArcPaint.setColor(mUnmProgressColor);
+            mArcPaint.setColor(mUnProgressColor);
             canvas.drawArc(mArcRect, 90 + angle + targetDegree, 360 - mDegree - targetDegree, false, mArcPaint);
         } else {
             if (mBgShow) {//绘制圆弧背景
@@ -144,11 +144,16 @@ public class ArcProgressBar extends ProgressBar {
             }
             canvas.rotate(180 + angle, x, y);//绕圆心旋转坐标轴
             for (int i = 0; i <= count; i++) {
-                if (i < target) {
+                if (target == count) {
                     mLinePaint.setColor(mProgressColor);
                 } else {
-                    mLinePaint.setColor(mUnmProgressColor);
+                    if (i < target) {
+                        mLinePaint.setColor(mProgressColor);
+                    } else {
+                        mLinePaint.setColor(mUnProgressColor);
+                    }
                 }
+
                 canvas.drawLine(x, mArcRect.top + ((float) mBoardWidth) / 2, x, mArcRect.top - ((float) mBoardWidth) / 2, mLinePaint);
                 canvas.rotate(mTickDensity, x, y);//绕圆心旋转坐标轴
             }

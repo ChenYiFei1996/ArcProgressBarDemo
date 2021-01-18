@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.AtyArcProgressBarDemo">
+
+    <data>
+
+        <variable
+            name="arcProgress"
+            type="int" />
+
+        <variable
+            name="arcProgressStr"
+            type="String" />
+
+        <variable
+            name="tickProgress"
+            type="int" />
+
+        <variable
+            name="tickProgressStr"
+            type="String" />
+
+        <variable
+            name="onClick"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.cyf.arcprogressbar.view.ArcProgressBar
+                android:id="@+id/arc_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="@{arcProgress, default = 0}"
+                app:arcCapRound="false"
+                app:barRadius="100dp"
+                app:borderWidth="34dp"
+                app:degree="0"
+                app:progressColor="@color/green"
+                app:progressStyle="arc"
+                app:unProgressColor="@color/grey" />
+
+            <RelativeLayout
+                android:layout_width="180dp"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/arc_progress_bar_minus"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:onClick="@{onClick}"
+                    android:text="-"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/arc_progress_bar_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@{arcProgressStr}"
+                    android:textSize="20dp" />
+
+                <Button
+                    android:id="@+id/arc_progress_bar_add"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:onClick="@{onClick}"
+                    android:text="+"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.cyf.arcprogressbar.view.ArcProgressBar
+                    android:id="@+id/tick_progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:progress="@{tickProgress, default = 0}"
+                    app:arcBgColor="@color/grey"
+                    app:arcCapRound="true"
+                    app:barRadius="100dp"
+                    app:bgShow="true"
+                    app:borderWidth="34dp"
+                    app:degree="90"
+                    app:progressColor="@color/green"
+                    app:progressStyle="tick"
+                    app:unProgressColor="@color/pink" />
+
+                <RelativeLayout
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/tick_progress_bar_minus"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:onClick="@{onClick}"
+                        android:text="-"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/tick_progress_bar_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@{tickProgressStr}"
+                        android:textSize="20dp" />
+
+                    <Button
+                        android:id="@+id/tick_progress_bar_add"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:onClick="@{onClick}"
+                        android:text="+"
+                        android:textSize="20dp" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
